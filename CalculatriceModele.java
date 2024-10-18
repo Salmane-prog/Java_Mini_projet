@@ -1,67 +1,162 @@
 import java.util.Stack;
 
 public class CalculatriceModele {
-    private Stack<Double> pile;
+    private Stack<Double> stack;
 
     public CalculatriceModele() {
-        pile = new Stack<>();
+        stack = new Stack<>();
     }
 
-    public void push(double valeur) {
-        pile.push(valeur);
+    public void push(double value) {
+        stack.push(value);
     }
 
-    public double pop() throws Exception {
-        if (pile.isEmpty()) {
-            throw new Exception("La pile est vide");
+    public double pop() {
+        if (!stack.isEmpty()) {
+            return stack.pop();
+        } else {
+            throw new IllegalStateException("Stack is empty");
         }
-        return pile.pop();
     }
 
-    public void addition() throws Exception {
-        if (pile.size() < 2) {
-            throw new Exception("Pas assez d'opérandes");
+    public void add() {
+        if (stack.size() >= 2) {
+            double b = stack.pop();
+            double a = stack.pop();
+            stack.push(a + b);
+        } else {
+            throw new IllegalStateException("Not enough operands");
         }
-        double a = pop();
-        double b = pop();
-        pile.push(a + b);
     }
 
-    public void soustraction() throws Exception {
-        if (pile.size() < 2) {
-            throw new Exception("Pas assez d'opérandes");
+    public void subtract() {
+        if (stack.size() >= 2) {
+            double b = stack.pop();
+            double a = stack.pop();
+            stack.push(a - b);
+        } else {
+            throw new IllegalStateException("Not enough operands");
         }
-        double a = pop();
-        double b = pop();
-        pile.push(b - a);
     }
 
-    public void multiplication() throws Exception {
-        if (pile.size() < 2) {
-            throw new Exception("Pas assez d'opérandes");
+    public void multiply() {
+        if (stack.size() >= 2) {
+            double b = stack.pop();
+            double a = stack.pop();
+            stack.push(a * b);
+        } else {
+            throw new IllegalStateException("Not enough operands");
         }
-        double a = pop();
-        double b = pop();
-        pile.push(a * b);
     }
 
-    public void division() throws Exception {
-        if (pile.size() < 2) {
-            throw new Exception("Pas assez d'opérandes");
+    public void divide() {
+        if (stack.size() >= 2) {
+            double b = stack.pop();
+            double a = stack.pop();
+            if (b != 0) {
+                stack.push(a / b);
+            } else {
+                throw new IllegalArgumentException("Division by zero");
+            }
+        } else {
+            throw new IllegalStateException("Not enough operands");
         }
-        double a = pop();
-        double b = pop();
-        if (a == 0) {
-            throw new ArithmeticException("Division par zéro");
-        }
-        pile.push(b / a);
     }
 
-    public String afficherPile() {
-        return pile.toString();
+    // New feature: switch between positive and negative
+    public void toggleSign() {
+        if (!stack.isEmpty()) {
+            double a = stack.pop();
+            stack.push(-a);
+        } else {
+            throw new IllegalStateException("Stack is empty");
+        }
+    }
+
+    // New feature: calculate the exponential of the top number
+    public void exp() {
+        if (!stack.isEmpty()) {
+            double a = stack.pop();
+            stack.push(Math.exp(a));
+        } else {
+            throw new IllegalStateException("Stack is empty");
+        }
+    }
+
+    // New feature: calculate the logarithm of the top number
+    public void log() {
+        if (!stack.isEmpty()) {
+            double a = stack.pop();
+            if (a > 0) {
+                stack.push(Math.log(a));
+            } else {
+                throw new IllegalArgumentException("Logarithm of non-positive number");
+            }
+        } else {
+            throw new IllegalStateException("Stack is empty");
+        }
+    }
+
+    // New feature: calculate the cosine of the top number
+    public void cos() {
+        if (!stack.isEmpty()) {
+            double a = stack.pop();
+            stack.push(Math.cos(a));
+        } else {
+            throw new IllegalStateException("Stack is empty");
+        }
+    }
+
+    // New feature: calculate the sine of the top number
+    public void sin() {
+        if (!stack.isEmpty()) {
+            double a = stack.pop();
+            stack.push(Math.sin(a));
+        } else {
+            throw new IllegalStateException("Stack is empty");
+        }
+    }
+
+    // New feature: calculate the tangent of the top number
+    public void tan() {
+        if (!stack.isEmpty()) {
+            double a = stack.pop();
+            stack.push(Math.tan(a));
+        } else {
+            throw new IllegalStateException("Stack is empty");
+        }
+    }
+
+    // New feature: check if the stack is empty
+    public boolean isEmpty() {
+        return stack.isEmpty();
+    }
+
+    // New feature: remove the last element
+    public void drop() {
+        if (!stack.isEmpty()) {
+            stack.pop();
+        } else {
+            throw new IllegalStateException("Stack is empty");
+        }
+    }
+
+    public void swap() {
+        if (stack.size() >= 2) {
+            double a = stack.pop();
+            double b = stack.pop();
+            stack.push(a);
+            stack.push(b);
+        } else {
+            throw new IllegalStateException("Not enough operands");
+        }
     }
 
     public void clear() {
-        pile.clear();
+        stack.clear();
+    }
+
+    public String getStackAsString() {
+        return stack.toString();
     }
 }
