@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="openjfx-23.0.1_windows-x64_bin-jmods">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../openjfx-23.0.1_windows-x64_bin-jmods.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

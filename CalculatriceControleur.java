@@ -1,12 +1,14 @@
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
 public class CalculatriceControleur {
     private CalculatriceModele model;
-    private CalculatriceVue view;
+    private CalculatriceVuee view;
+    private String currentInput = "";
 
-    public CalculatriceControleur(CalculatriceModele model, CalculatriceVue view) {
+    public CalculatriceControleur(CalculatriceModele model, CalculatriceVuee view) {
         this.model = model;
         this.view = view;
         addEventListeners();
@@ -27,68 +29,93 @@ public class CalculatriceControleur {
     private void handleInput(String input) {
         try {
             switch (input) {
-                case "+":
-                    model.add();
+                case "push":
+                    if (!currentInput.isEmpty()) {
+                        model.push(Double.parseDouble(currentInput));
+                        currentInput = "";
+                        updateView();
+                    }
                     break;
-                case "-":
-                    model.subtract();
-                    break;
-                case "*":
-                    model.multiply();
-                    break;
-                case "/":
-                    model.divide();
-                    break;
-                case "swap":
-                    model.swap();
+                case "CE":
+                    model.drop();
+                    updateView();
                     break;
                 case "C":
-                    model.clear();
-                    break;
-                case "exp":
-                    model.exp();
-                    break;
-                case "log":
-                    model.log();
-                    break;
-                case "cos":
-                    model.cos();
-                    break;
-                case "sin":
-                    model.sin();
-                    break;
-                case "tan":
-                    model.tan();
-                    break;
-                case "+/-":
-                    model.toggleSign();
-                    break;
-                case "drop":
-                    model.drop();
+                    model.clear(); // Clear the entire stack
+                    updateView();
                     break;
                 case "isEmpty":
                     if (model.isEmpty()) {
-                        view.displayError("Stack is empty");
+                        view.displayError("Stack is empty.");
                     } else {
-                        view.updateHistory("Stack is not empty");
+                        view.updateHistory("Stack is not empty.");
                     }
                     break;
+                case "+":
+                    model.add();
+                    updateView();
+                    break;
+                case "-":
+                    model.subtract();
+                    updateView();
+                    break;
+                case "x":
+                    model.multiply();
+                    updateView();
+                    break;
+                case "/":
+                    model.divide();
+                    updateView();
+                    break;
+                case "SWAP":
+                    model.swap();
+                    updateView();
+                    break;
+                case "exp":
+                    model.exp();
+                    updateView();
+                    break;
+                case "log":
+                    model.log();
+                    updateView();
+                    break;
+                case "cos":
+                    model.cos();
+                    updateView();
+                    break;
+                case "Sin":
+                    model.sin();
+                    updateView();
+                    break;
+                case "Tan":
+                    model.tan();
+                    updateView();
+                    break;
+                case "+/-":
+                    model.toggleSign();
+                    updateView();
+                    break;
                 default:
-                    try {
-                        double value = Double.parseDouble(input);
-                        model.push(value);
-                    } catch (NumberFormatException ex) {
-                        view.displayError("Invalid input");
-                    }
+                    // This case handles number input and operators like . (decimal point)
+                    currentInput += input;
+                    view.updateDisplay(currentInput);
+                    break;
             }
-            updateView();
         } catch (IllegalStateException | IllegalArgumentException ex) {
             view.displayError(ex.getMessage());
         }
     }
 
     private void updateView() {
+        // Update the Resultat field with the current state of the stack
         view.updateDisplay(model.getStackAsString());
-        view.updateHistory("Stack: " + model.getStackAsString());
+
+        // Update the history area to include the latest stack state
+        updateHistory("Stack: " + model.getStackAsString());
+    }
+
+    private void updateHistory(String operation) {
+        String currentHistory = view.getHistoryText();
+        view.setHistoryText(currentHistory + "\n" + operation);
     }
 }

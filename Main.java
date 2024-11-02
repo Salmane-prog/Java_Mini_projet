@@ -1,8 +1,13 @@
+
 public class Main {
+
     public static void main(String[] args) {
-        CalculatriceModele modele = new CalculatriceModele();
-        CalculatriceVue vue = new CalculatriceVue();
-        new CalculatriceControleur(modele, vue);
-        vue.setVisible(true);
+        // Initialiser le modèle, la vue, et le contrôleur
+        CalculatriceModele model = new CalculatriceModele();
+        CalculatriceVuee view = new CalculatriceVuee();
+        CalculatriceControleur controller = new CalculatriceControleur(model, view);
+
+        // Afficher l'interface graphique
+        view.setVisible(true);
     }
 }
